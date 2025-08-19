@@ -1,0 +1,9 @@
+{
+	"name": "kaggleseries",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "0b9bc11d-ce48-4c4e-927c-82abf55cb1e4",
+		"tenantId": "288ffd2c-f09c-4154-ad8e-9c674ebe9dfa"
+	}
+}
