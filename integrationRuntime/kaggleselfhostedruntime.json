@@ -1,0 +1,6 @@
+{
+	"name": "kaggleselfhostedruntime",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
