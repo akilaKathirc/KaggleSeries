@@ -1,0 +1,67 @@
+{
+	"name": "sourcelocalseriesfile",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "KaggleLocalFileServer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": "series.csv"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Rank",
+				"type": "String"
+			},
+			{
+				"name": "Peak",
+				"type": "String"
+			},
+			{
+				"name": "All Time Peak",
+				"type": "String"
+			},
+			{
+				"name": "Actual gross",
+				"type": "String"
+			},
+			{
+				"name": "Adjusted gross (in 2022 dollars)",
+				"type": "String"
+			},
+			{
+				"name": "Artist",
+				"type": "String"
+			},
+			{
+				"name": "Tour title",
+				"type": "String"
+			},
+			{
+				"name": "Year(s)",
+				"type": "String"
+			},
+			{
+				"name": "Shows",
+				"type": "String"
+			},
+			{
+				"name": "Average gross",
+				"type": "String"
+			},
+			{
+				"name": "Ref.",
+				"type": "String"
+			}
+		]
+	}
+}

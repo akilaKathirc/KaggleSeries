@@ -1,0 +1,122 @@
+{
+	"name": "kaggleseries",
+	"properties": {
+		"activities": [
+			{
+				"name": "copy local series file",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "FileServerReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "sourcelocalseriesfile",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "sinkSeriesfilesystem",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "pipelinesuccessemail",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "copy local series file",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"url": "https://prod-04.uaenorth.logic.azure.com:443/workflows/79260ca7837142529044bc2efe086334/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=J_X86pR8s0R3xIWVJtZdGZT9vfklZuO1BVJtSsqEtGE",
+					"body": {
+						"value": "{\n    \"pipelineName\": \"@{pipeline().Pipeline}\",\n    \"status\": \"Succeeded\",\n    \"runId\": \"@{pipeline().RunId}\",\n    \"time\": \"@{utcNow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "pipelinefailuremail",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "copy local series file",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"url": "https://prod-04.uaenorth.logic.azure.com:443/workflows/79260ca7837142529044bc2efe086334/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=J_X86pR8s0R3xIWVJtZdGZT9vfklZuO1BVJtSsqEtGE",
+					"body": {
+						"value": "{\n     \"pipelineName\": \"@{pipeline().Pipeline}\",\n    \"status\": \"Failed\",\n    \"runId\": \"@{pipeline().RunId}\",\n    \"time\": \"@{utcNow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"annotations": []
+	}
+}
